@@ -76,20 +76,18 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
    config.vm.provision "shell", inline: <<-SHELL
-     uname -r
-     sudo apt-get update
-#     sudo apt-get build-dep linux
-#     sudo apt -y install make kernel-package libqt4-dev wget linux-sources libncurses-dev libncurses dwarves build-essential gcc bc bison flex libssl-dev libelf-dev
-#     mkdir new_kernel && cd new_kernel
-#     wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.9.tar.xz && tar xvf linux-6.8.9.tar.xz && cd linux-6.8.9/
-#     cp /boot/config-`uname -r` ./.config
-   #  make oldconfig
-#     make
-#     make modules
-#     make modules_install
-#     make install
-#     apt-get update && apt -y upgrade
-#     apt-get install -y apache2
-#     reboot
+     uname -r  #посмотреть версию текущего ядра (опционально)
+     sudo apt update 1> /dev/null
+     sudo apt -y install make gcc build-essential flex bison libelf-dev libssl-dev debhelper-compat
+     sudo mkdir new_kernel && cd new_kernel
+     sudo wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.9.tar.xz && sudo tar xvf linux-6.8.9.tar.xz > /dev/null && cd linux-6.8.9/
+     cp /boot/config-`uname -r` ./.config
+     yes "" | make oldconfig 1>/dev/null
+     sudo scripts/config --disable SYSTEM_TRUSTED_KEYS
+     sudo scripts/config --disable SYSTEM_REVOCATION_KEYS
+     make -j$`nproc` bindeb-pkg 1>/dev/null
+     sudo dpkg -i ../*.deb
+     reboot  #перезагрузка после обновления ядра (опционально)
+
    SHELL
 end
