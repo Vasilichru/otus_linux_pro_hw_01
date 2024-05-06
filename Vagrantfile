@@ -75,19 +75,19 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-   config.vm.provision "shell", inline: <<-SHELL
-     uname -r  #посмотреть версию текущего ядра (опционально)
-     sudo apt update 1> /dev/null
-     sudo apt -y install make gcc build-essential flex bison libelf-dev libssl-dev debhelper-compat
-     sudo mkdir new_kernel && cd new_kernel
-     sudo wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.9.tar.xz && sudo tar xvf linux-6.8.9.tar.xz > /dev/null && cd linux-6.8.9/
-     cp /boot/config-`uname -r` ./.config
-     yes "" | make oldconfig 1>/dev/null
-     sudo scripts/config --disable SYSTEM_TRUSTED_KEYS
-     sudo scripts/config --disable SYSTEM_REVOCATION_KEYS
-     make -j$`nproc` bindeb-pkg 1>/dev/null
-     sudo dpkg -i ../*.deb
-     reboot  #перезагрузка после обновления ядра (опционально)
-
-   SHELL
+#   config.vm.provision "shell", inline: <<-SHELL
+#     uname -r  #посмотреть версию текущего ядра (опционально)
+#     sudo apt update 1> /dev/null
+#     sudo apt -y install make gcc build-essential flex bison libelf-dev libssl-dev debhelper-compat
+#     sudo mkdir new_kernel && cd new_kernel
+#     sudo wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.9.tar.xz && sudo tar xvf linux-6.8.9.tar.xz > /dev/null && cd linux-6.8.9/
+#     cp /boot/config-`uname -r` ./.config
+#     yes "" | make oldconfig 1>/dev/null
+#     sudo scripts/config --disable SYSTEM_TRUSTED_KEYS
+#     sudo scripts/config --disable SYSTEM_REVOCATION_KEYS
+#     make -j$`nproc` bindeb-pkg 1>/dev/null
+#     sudo dpkg -i ../*.deb
+#     reboot  #перезагрузка после обновления ядра (опционально)
+#
+#   SHELL
 end
